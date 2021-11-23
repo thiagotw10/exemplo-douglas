@@ -1,0 +1,6 @@
+{
+    "name": "devphp/libraries",
+    "require": {
+        "nesbot/carbon": "^2.31"
+    }
+}
