@@ -2,7 +2,7 @@
 
 defined('BASEPATH') or exit('No direct script access allowed');
 
-class Cargos extends CI_Controller
+class Grupos extends CI_Controller
 {
     private $error = false;
     
@@ -19,10 +19,10 @@ class Cargos extends CI_Controller
     public function index()
     {
 
-        $this->load->model('cargos_model');
+        $this->load->model('grupos_model');
         $this->load->helper('usuario');
-        $this->title = "Cargos";
-        $this->menu = 'Cargos';
+        $this->title = "Grupos";
+        $this->menu = 'Grupos';
         $this->scripts = ['custom/usuario/index'];
 
         $data['c_nome'] = $this->input->get('c_nome');
@@ -31,11 +31,11 @@ class Cargos extends CI_Controller
         $data['c_paginaAtual'] = $this->input->get('c_paginaAtual');
         $data['c_limite'] = $this->input->get('c_limite');
 
-        $data['c_paginas'] = $this->cargos_model->get_count($data);
-        $data['cargos'] = $this->cargos_model->get(false, $data);
+        $data['c_paginas'] = $this->grupos_model->get_count($data);
+        $data['grupos'] = $this->grupos_model->get(false, $data);
         
 
-        $this->load->view('cargos/index', $data);
+        $this->load->view('grupos/index', $data);
     }
 
     private function buildform()
@@ -49,8 +49,8 @@ class Cargos extends CI_Controller
 
     public function add()
     {
-        $this->title = 'Novo cargo';
-        $this->menu = 'cargos';
+        $this->title = 'Novo grupo';
+        $this->menu = 'grupos';
         $this->scripts = ["../assets/select2/js/select2.full.min", "../assets/select2/js/i18n/pt-BR", 'jquery.mask.min', "../js/custom/usuario/form"];
         $this->styles = ["../assets/select2/css/select2.min", "../assets/select2/css/select2-bootstrap.min"];
 
@@ -60,20 +60,20 @@ class Cargos extends CI_Controller
             $data['error'] = $this->error;
         }
 
-        $this->load->view('cargos/form', $data);
+        $this->load->view('grupos/form', $data);
     }
 
     public function edit($id, $hasError = false)
     {
-        $this->load->model('cargos_model');
+        $this->load->model('grupos_model');
         if ($hasError == false) {
-            $data = $this->cargos_model->get($id);
+            $data = $this->grupos_model->get($id);
         } else {
             $data = $this->buildform();
         }
 
-        $this->title = "Alterar Cargos #$id";
-        $this->menu = 'artigo';
+        $this->title = "Alterar Grupos #$id";
+        $this->menu = 'grupo';
         $this->scripts = ["../assets/select2/js/select2.full.min", "../assets/select2/js/i18n/pt-BR", 'jquery.mask.min', "../js/custom/usuario/form"];
         $this->styles = ["../assets/select2/css/select2.min", "../assets/select2/css/select2-bootstrap.min"];
 
@@ -82,14 +82,14 @@ class Cargos extends CI_Controller
         }
         
 
-        $this->load->view('cargos/form', $data);
+        $this->load->view('grupos/form', $data);
     }
 
     public function remove()
     {
         $id = $this->input->get('id');
-        $this->load->model('cargos_model');
-        $updated = $this->usuario_model->update($id, ['deleted' => 1]);
+        $this->load->model('grupos_model');
+        $updated = $this->grupos_model->update($id, ['deleted' => 1]);
         $this->layout = 'ajax';
         return $this->output
             ->set_content_type('application/json')
@@ -120,7 +120,7 @@ class Cargos extends CI_Controller
             return;
         }
 
-        $this->load->model('cargos_model');
+        $this->load->model('grupos_model');
 
         $sql_data = array(
             'resumo' => $this->input->post('resumo'),
@@ -131,12 +131,12 @@ class Cargos extends CI_Controller
 
        
         if ($usuario_id) {
-            $update = $this->cargos_model->update($usuario_id, $sql_data);
+            $update = $this->grupos_model->update($usuario_id, $sql_data);
 
             if ($update) {
                 $data['title'] = "Sucesso";
                 $data['msg'] = "Usuário alterado com sucesso !!";
-                $data['controller'] = "Cargos";
+                $data['controller'] = "Grupos";
                 $this->load->view('success/sucesso', $data);
             } else {
                 $data['title'] = "Erro";
@@ -149,7 +149,7 @@ class Cargos extends CI_Controller
             if ($create) {
                 $data['title'] = "Sucesso";
                 $data['msg'] = "Usuário cadastrado com sucesso !!";
-                $data['controller'] = "Cargos";
+                $data['controller'] = "Grupos";
                 $this->load->view('success/sucesso', $data);
             } else {
                 $data['title'] = "Erro";

@@ -1,12 +1,12 @@
-<?= form_consulta(base_url('Cargos'), ['nomes' => 'Nomes'], $c_campo, $c_valor, $c_limite, "Pesquisar os cargos"); ?>
+<?= form_consulta(base_url('Grupos'), ['nomes' => 'Nomes'], $c_campo, $c_valor, $c_limite, "Pesquisar os grupos"); ?>
 
 <section class="panel">
     <header class="panel-heading">Registros</header>
 
     <div class="panel-body pull-right">
-        <a class="btn btn-primary btn-orange" href="<?php echo base_url('Cargos/add/'); ?>">
+        <a class="btn btn-primary btn-orange" href="<?php echo base_url('Grupos/add/'); ?>">
             <i class="fa fa-plus"></i> 
-            Adicionar Cargos
+            Adicionar Grupos
         </a>
     </div>
 
@@ -14,7 +14,7 @@
         <table class="table table-striped table-advance table-hover">
             <thead>
                 <tr>
-                    <th>Cargos</th>
+                    <th>Grupos</th>
                     
                     <th class="col-lg-1 text-right">A&ccedil;&otilde;es</th>
                 </tr>
@@ -45,5 +45,5 @@
         
     </div>
 
-    <?= form_pagination(base_url('Cargos'), $c_valor, $c_campo, $c_limite, $c_paginas, $c_paginaAtual) ?>
+    <?= form_pagination(base_url('Grupos'), $c_valor, $c_campo, $c_limite, $c_paginas, $c_paginaAtual) ?>
 </section>
