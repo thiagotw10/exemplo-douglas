@@ -40,9 +40,8 @@ class Grupos extends CI_Controller
 
     private function buildform()
     {
-        $data['resumo'] = $this->input->post('resumo');
-        $data['texto'] = $this->input->post('texto');
-        $data['usuario_id'] = $this->input->post('usuario_id');
+        $data['nome'] = $this->input->post('nome');
+        
 
         return $data;
     }
@@ -106,9 +105,8 @@ class Grupos extends CI_Controller
 
         $this->load->library('form_validation');
        
-        $this->form_validation->set_rules('resumo', 'Resumo', 'trim|required');
-        $this->form_validation->set_rules('texto', 'Texto', 'trim|required');
-        $this->form_validation->set_rules('usuario_id', 'Usuario_id', 'trim|required');
+        $this->form_validation->set_rules('nome', 'Nome', 'trim|required');
+        
 
         if ($this->form_validation->run() === false) {
             $this->error = validation_errors();
@@ -123,9 +121,8 @@ class Grupos extends CI_Controller
         $this->load->model('grupos_model');
 
         $sql_data = array(
-            'resumo' => $this->input->post('resumo'),
-            'texto' => $this->input->post('texto'),
-            'usuario_id' => $this->session->userdata('user'),
+            'nome' => $this->input->post('nome'),
+            
             
         );
 
@@ -144,7 +141,7 @@ class Grupos extends CI_Controller
                 $this->load->view('error/cli/erro_geral', $data);
             }
         } else {
-            $create = $this->cargos_model->create($sql_data);
+            $create = $this->grupos_model->create($sql_data);
 
             if ($create) {
                 $data['title'] = "Sucesso";

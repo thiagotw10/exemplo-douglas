@@ -2,14 +2,14 @@
 
 defined('BASEPATH') or exit('No direct script access allowed');
 
-class Usuario_model extends CI_Model
+class GrupoUsuario_model extends CI_Model
 {
 
-    private $table = 'usuario';
+    private $table = 'grupo_usuario';
 
     public function get($id = false, $consulta = false)
     {
-        $this->db->where('deleted', 0);
+        // $this->db->where('deleted', 0);
         if ($id) {
             $this->db->where('id', $id);
         }
@@ -26,7 +26,7 @@ class Usuario_model extends CI_Model
             $this->db->limit($limite, $paginaAtual * $limite);
         }
 
-        $this->db->order_by('nome', 'asc');
+        $this->db->order_by('id_usuario', 'asc');
         $get = $this->db->get($this->table);
 
         if ($id) {
@@ -39,36 +39,35 @@ class Usuario_model extends CI_Model
 
     public function create($data)
     {
-        $data['senha'] = password_hash($data['senha'], PASSWORD_ARGON2I);
-        // INSERT INTO `table2` SELECT * FROM `table1`
+        // $data['senha'] = password_hash($data['senha'], PASSWORD_ARGON2I);
+
         $this->db->insert($this->table, $data);
-        // $this->db->insert_batch($this->table, $data);
         return $this->db->insert_id();
     }
 
     public function update($id, $data)
     {
-        if (isset($data['senha'])) {
-            $data['senha'] = password_hash($data['senha'], PASSWORD_ARGON2I);
-        }
+        // if (isset($data['senha'])) {
+        //     $data['senha'] = password_hash($data['senha'], PASSWORD_ARGON2I);
+        // }
 
         $this->db->where('id', $id);
         $update = $this->db->update($this->table, $data);
         return $update;
     }
 
-    public function validate($email, $senha)
-    {
-        $this->db->where('email', $email);
-        $query = $this->db->get($this->table);
-        if ($query->num_rows() > 0) {
-            $usuario = $query->row_array();
-            if (password_verify($senha, $usuario['senha'])) {
-                return $usuario;
-            }
-        }
-        return array();
-    }
+    // public function validate($email, $senha)
+    // {
+    //     $this->db->where('email', $email);
+    //     $query = $this->db->get($this->table);
+    //     if ($query->num_rows() > 0) {
+    //         $usuario = $query->row_array();
+    //         if (password_verify($senha, $usuario['senha'])) {
+    //             return $usuario;
+    //         }
+    //     }
+    //     return array();
+    // }
 
     public function delete($id)
     {
@@ -93,9 +92,5 @@ class Usuario_model extends CI_Model
             return $get['count'];
         }
     }
-
-
-
-    
 
 }

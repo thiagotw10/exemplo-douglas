@@ -20,7 +20,7 @@
                     <div class="form-group">
                         <label>Grupos:</label>
                         <div>
-                            <?= form_input('usuario_id', $this->session->userdata('nome'), 'class="form-control" autofocus required maxlength="50"'); ?>
+                            <?= form_input('nome', $nome, 'class="form-control" autofocus required maxlength="50"'); ?>
                         </div>
                     </div>
                 </div>

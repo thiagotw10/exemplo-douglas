@@ -14,6 +14,31 @@ class Usuario extends CI_Controller
         if (!$this->usercontrol->hasPermission('Usuario')) {
             redirect('Dashboard');
         }
+
+
+        $this->load->model('cargos_model');
+        $list = $this->cargos_model->get(false, false);
+
+        $ids = array();
+        $values = array();
+        foreach ($list as $entity) {
+            array_push($ids, $entity['id']);
+            array_push($values, $entity['nome']);
+        }
+        $this->CARGOS = array_combine($ids, $values);
+
+
+        
+        $this->load->model('grupos_model');
+        $listGrupos = $this->grupos_model->get(false, false);
+
+        $idsGrupos = array();
+        $valuesGrupos = array();
+        foreach ($listGrupos as $entity) {
+            array_push($idsGrupos, $entity['id']);
+            array_push($valuesGrupos, $entity['nome']);
+        }
+        $this->GRUPOS = array_combine($idsGrupos, $valuesGrupos);
     }
 
     public function index()
@@ -33,7 +58,7 @@ class Usuario extends CI_Controller
 
         $data['c_paginas'] = $this->usuario_model->get_count($data);
         $data['usuarios'] = $this->usuario_model->get(false, $data);
-        print_r($data['usuarios']);
+        // print_r($data['usuarios']);
 
         $this->load->view('usuario/index', $data);
     }
@@ -44,6 +69,10 @@ class Usuario extends CI_Controller
         $data['email'] = $this->input->post('email');
         $data['senha'] = $this->input->post('senha');
         $data['cpf'] = $this->input->post('cpf');
+        $data['cargo_id'] = $this->input->post('cargos');
+        $data['grupo_id'] = $this->input->post('grupos');
+        $data['cargos'] = $this->CARGOS;
+        $data['grupos'] = $this->GRUPOS;
 
         return $data;
     }
@@ -52,7 +81,7 @@ class Usuario extends CI_Controller
     {
         $this->title = 'Novo Usuário';
         $this->menu = 'usuario';
-        $this->scripts = ["../assets/select2/js/select2.full.min", "../assets/select2/js/i18n/pt-BR", 'jquery.mask.min', "../js/custom/usuario/form"];
+        $this->scripts = ["../assets/select2/js/select2.full.min", "../assets/select2/js/i18n/pt-BR", 'jquery.mask.min', "custom/usuario/form"];
         $this->styles = ["../assets/select2/css/select2.min", "../assets/select2/css/select2-bootstrap.min"];
 
         $data = $this->buildform();
@@ -69,18 +98,22 @@ class Usuario extends CI_Controller
         $this->load->model('usuario_model');
         if ($hasError == false) {
             $data = $this->usuario_model->get($id);
+            $data["cargos"] = $this->CARGOS;
+            $data['grupos'] = $this->GRUPOS;
         } else {
             $data = $this->buildform();
         }
 
         $this->title = "Alterar Usuário #$id";
         $this->menu = 'usuario';
-        $this->scripts = ["../assets/select2/js/select2.full.min", "../assets/select2/js/i18n/pt-BR", 'jquery.mask.min', "../js/custom/usuario/form"];
+        $this->scripts = ["../assets/select2/js/select2.full.min", "../assets/select2/js/i18n/pt-BR", 'jquery.mask.min', "custom/usuario/form"];
         $this->styles = ["../assets/select2/css/select2.min", "../assets/select2/css/select2-bootstrap.min"];
 
         if ($this->error) {
             $data['error'] = $this->error;
         }
+        
+        
         $this->load->view('usuario/form', $data);
     }
 
@@ -111,8 +144,10 @@ class Usuario extends CI_Controller
             $this->form_validation->set_rules('email', 'Email', 'trim|required|valid_email');
         }
         $this->form_validation->set_rules('nome', 'Nome', 'trim|required');
-        $this->form_validation->set_rules('senha', 'Senha', 'trim|required');
+        $this->form_validation->set_rules('senha', 'Senha', 'trim');
         $this->form_validation->set_rules('cpf', 'CPF', 'trim|required');
+        $this->form_validation->set_rules('cargos', 'Cargos', 'trim|required');
+        $this->form_validation->set_rules('grupos', 'Grupos', 'trim|required');
 
         if ($this->form_validation->run() === false) {
             $this->error = validation_errors();
@@ -125,12 +160,21 @@ class Usuario extends CI_Controller
         }
 
         $this->load->model('usuario_model');
+        $this->load->model('grupousuario_model');
 
         $sql_data = array(
             'nome' => $this->input->post('nome'),
             'email' => $this->input->post('email'),
             'senha' => $this->input->post('senha'),
+            'cargo_id' => $this->input->post('cargos'),
+            'grupo_id' => $this->input->post('grupos'),
             'cpf' => preg_replace('/\D+/', '', $this->input->post('cpf')),
+        );
+
+        $sql_grupo = array(
+            'usuario_id' => $this->session->userdata('user'),
+            'grupos_id' => $this->input->post('grupos'),
+            
         );
 
         if (!empty($this->input->post('senha'))) {
@@ -139,8 +183,9 @@ class Usuario extends CI_Controller
 
         if ($usuario_id) {
             $update = $this->usuario_model->update($usuario_id, $sql_data);
+            $updateGrupoUsuario = $this->grupousuario_model->update($usuario_id, $sql_grupo);
 
-            if ($update) {
+            if ($update || $updateGrupoUsuario) {
                 $data['title'] = "Sucesso";
                 $data['msg'] = "Usuário alterado com sucesso !!";
                 $data['controller'] = "Usuario";
@@ -152,8 +197,9 @@ class Usuario extends CI_Controller
             }
         } else {
             $create = $this->usuario_model->create($sql_data);
+            $createGrupoUsuario = $this->grupousuario_model->create($sql_grupo);
 
-            if ($create) {
+            if ($create || $createGrupoUsuario) {
                 $data['title'] = "Sucesso";
                 $data['msg'] = "Usuário cadastrado com sucesso !!";
                 $data['controller'] = "Usuario";

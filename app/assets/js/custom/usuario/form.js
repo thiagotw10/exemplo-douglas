@@ -48,9 +48,10 @@ var Script = function () {
 }();
 
 
-$('.select2').select2({
+$('select').select2({
     theme: "bootstrap",
-    language: "pt-BR"
+    language: "pt-BR",
+    multiple: false
 });
 
 $("[name='cpf']").mask('000.000.000-00', {reverse: true});

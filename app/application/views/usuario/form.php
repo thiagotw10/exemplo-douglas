@@ -47,8 +47,30 @@
                     <div class="form-group">
                         <label>Senha:</label>
                         <div>
-                            <?= form_password('senha', $senha, 'class="form-control" autocomplete="off"'); ?>
+                            <?= form_password('senha', '', 'class="form-control" autocomplete="off"'); ?>
                             <?php if(isset($id)) { echo '<span class="help-inline">* Deixe em branco para manter a senha atual.</span>'; } ?>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-lg-6">
+                    <div class="form-group">
+                        <label>Cargos</label>
+                        <div>
+                        <?= form_dropdown('cargos', $cargos, set_value('cargos', $cargo_id), 'class="form-control"') ?>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-lg-6">
+                    <div class="form-group">
+                        <label>Grupos</label>
+                        <div>
+                        <?= form_dropdown('grupos', $grupos, set_value('grupos', $grupo_id), 'class="form-control"') ?>
                         </div>
                     </div>
                 </div>

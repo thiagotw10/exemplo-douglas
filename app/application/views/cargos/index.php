@@ -21,13 +21,13 @@
             </thead>
             <tbody>
                 <?php
-                if (isset($artigos)) {
-                    foreach ($artigos as $entity) {
+                if (isset($cargos)) {
+                    foreach ($cargos as $entity) {
                         print "<tr>";
-                        print "<td>" . $entity["resumo"] . "</td>";
+                        print "<td>" . $entity["nome"] . "</td>";
                         
                         print '<td class="text-right">';
-                        print '<a class="img-icon" href="'. base_url('Artigos/edit/' . $entity['id']) .'"><img src="'.base_url('/assets/img/editar.png').'" style="width: 30px;"></a>';
+                        print '<a class="img-icon" href="'. base_url('Cargos/edit/' . $entity['id']) .'"><img src="'.base_url('/assets/img/editar.png').'" style="width: 30px;"></a>';
                         print ' ';
                         print ' ';
                         print '<a onclick="okDelete('. $entity['id'] .');" class="img-icon"><img src="'.base_url('/assets/img/excluir.png').'"></a>';

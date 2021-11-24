@@ -38,6 +38,7 @@ class Login extends CI_Controller
                     'user' => $result['id'],
                     'nome' => $result['nome'],
                     'email' => $result['email'],
+                    'cargos' => $result['cargo_id'],
                     'current_application' => CURRENT_APP,
                     'hash' => $hash
                 ));

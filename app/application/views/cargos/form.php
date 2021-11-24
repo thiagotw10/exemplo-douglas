@@ -5,7 +5,7 @@
     </header>
 
     <div class="panel-body">
-        <form id="form" acceptcharset="UTF-8" method="post" class="cmxform" action="<?php echo base_url('Artigos/save'); ?>" theme="simple" enctype="multipart/form-data">
+        <form id="form" acceptcharset="UTF-8" method="post" class="cmxform" action="<?php echo base_url('Cargos/save'); ?>" theme="simple" enctype="multipart/form-data">
             <input type="hidden" name="<?php echo $this->security->get_csrf_token_name(); ?>" value="<?php echo $this->security->get_csrf_hash(); ?>" />
             <?php
                 if (isset($id)) {
@@ -20,7 +20,7 @@
                     <div class="form-group">
                         <label>Cargos:</label>
                         <div>
-                            <?= form_input('usuario_id', $this->session->userdata('nome'), 'class="form-control" autofocus required maxlength="50"'); ?>
+                            <?= form_input('nome', $nome, 'class="form-control" autofocus required maxlength="50"'); ?>
                         </div>
                     </div>
                 </div>
